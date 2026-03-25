@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sistem Pakar Kerusakan Komputer</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f2f2f2;
+padding:20px;
+}
+
+.container{
+background:white;
+padding:25px;
+max-width:700px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+text-align:center;
+}
+
+.gejala label{
+display:block;
+margin:6px 0;
+}
+
+button{
+margin-top:20px;
+padding:10px 20px;
+font-size:16px;
+cursor:pointer;
+}
+
+.reset{
+background:red;
+color:white;
+margin-left:10px;
+}
+
+.hasil{
+margin-top:20px;
+padding:15px;
+background:#e8f5e9;
+border-radius:8px;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Sistem Pakar Deteksi Kerusakan Komputer</h1>
+
+<h3>Pilih Gejala:</h3>
+
+<div class="gejala">
+
+<label><input type="checkbox" value="B1"> B1 - Tidak ada gambar di monitor</label>
+<label><input type="checkbox" value="B2"> B2 - Terdapat garis horizontal / vertikal di monitor</label>
+<label><input type="checkbox" value="B3"> B3 - Tidak ada tampilan awal BIOS</label>
+<label><input type="checkbox" value="B4"> B4 - Muncul pesan error pada BIOS</label>
+<label><input type="checkbox" value="B5"> B5 - Alarm BIOS berbunyi</label>
+<label><input type="checkbox" value="B6"> B6 - Terdengar suara aneh pada HDD</label>
+<label><input type="checkbox" value="B7"> B7 - Sering terjadi hang saat menjalankan aplikasi</label>
+<label><input type="checkbox" value="B8"> B8 - Salah satu sidekick tidak bekerja</label>
+<label><input type="checkbox" value="B9"> B9 - Muncul pesan error saat menjalankan game</label>
+<label><input type="checkbox" value="B10"> B10 - Device driver tidak terdeteksi</label>
+<label><input type="checkbox" value="B11"> B11 - Tiba-tiba OS melakukan restart</label>
+<label><input type="checkbox" value="B12"> B12 - Kurangnya ruang virtual memory</label>
+<label><input type="checkbox" value="B13"> B13 - Suara tidak keluar meskipun driver sudah diinstall</label>
+<label><input type="checkbox" value="B14"> B14 - Muncul pesan error saat menjalankan aplikasi</label>
+<label><input type="checkbox" value="B15"> B15 - Muncul pesan error saat pertama OS di load dari HDD</label>
+<label><input type="checkbox" value="B16"> B16 - Tidak ada tanda perangkat bekerja</label>
+<label><input type="checkbox" value="B17"> B17 - Komputer sering mati tanpa sebab</label>
+<label><input type="checkbox" value="B18"> B18 - Windows kekurangan virtual memory</label>
+<label><input type="checkbox" value="B19"> B19 - Aplikasi berjalan lambat</label>
+<label><input type="checkbox" value="B20"> B20 - Kinerja grafis terasa berat</label>
+<label><input type="checkbox" value="B21"> B21 - Device tidak terdeteksi dalam BIOS</label>
+<label><input type="checkbox" value="B22"> B22 - Informasi deteksi salah dalam BIOS</label>
+<label><input type="checkbox" value="B23"> B23 - Hanya sebagian perangkat yang bekerja</label>
+<label><input type="checkbox" value="B24"> B24 - Sebagian karakter keyboard tidak berfungsi</label>
+<label><input type="checkbox" value="B25"> B25 - Pointer mouse tidak merespon</label>
+
+</div>
+
+<button onclick="diagnosa()">Diagnosa</button>
+<button class="reset" onclick="resetForm()">Reset</button>
+
+<div class="hasil" id="hasil"></div>
+
+</div>
+
+<script>
+
+function diagnosa(){
+
+let checked = [];
+
+document.querySelectorAll("input[type=checkbox]:checked").forEach(function(el){
+checked.push(el.value);
+});
+
+let hasil = "Kerusakan tidak terdeteksi";
+
+function ada(...g){
+return g.every(x => checked.includes(x));
+}
+
+/* RULE */
+
+if(ada("B1","B2"))
+hasil="A1 - Monitor Rusak";
+
+else if(ada("B3","B4","B5","B11","B12"))
+hasil="A2 - Memori Rusak";
+
+else if(ada("B6","B7","B8","B10","B21","B22"))
+hasil="A3 - HDD Rusak";
+
+else if(ada("B1","B3","B5","B9","B10","B12","B13"))
+hasil="A4 - VGA Rusak";
+
+else if(ada("B10","B13","B14"))
+hasil="A5 - Sound Card Rusak";
+
+else if(ada("B11","B15"))
+hasil="A6 - OS Bermasalah";
+
+else if(ada("B7","B12"))
+hasil="A7 - Aplikasi Rusak";
+
+else if(ada("B16","B17"))
+hasil="A8 - PSU Rusak";
+
+else if(ada("B1","B3","B4","B5"))
+hasil="A9 - Prosesor Rusak";
+
+else if(ada("B18","B19"))
+hasil="A10 - Memory Kurang";
+
+else if(ada("B9"))
+hasil="A11 - Memory VGA Kurang";
+
+else if(ada("B19"))
+hasil="A12 - Clock Prosesor Rendah";
+
+else if(ada("B21"))
+hasil="A13 - Kabel IDE Rusak";
+
+else if(ada("B5","B23"))
+hasil="A14 - Kurang Daya PSU";
+
+else if(ada("B10"))
+hasil="A15 - Perangkat USB Rusak";
+
+else if(ada("B10","B24"))
+hasil="A16 - Keyboard Rusak";
+
+else if(ada("B25"))
+hasil="A17 - Mouse Rusak";
+
+document.getElementById("hasil").innerHTML="Hasil Diagnosa : "+hasil;
+
+}
+
+function resetForm(){
+
+document.querySelectorAll("input[type=checkbox]").forEach(function(el){
+el.checked=false;
+});
+
+document.getElementById("hasil").innerHTML="";
+
+}
+
+</script>
+
+</body>
+</html>
