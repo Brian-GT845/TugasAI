@@ -6,48 +6,71 @@
 <style>
 
 body{
-font-family: Arial;
-background:#f2f2f2;
-padding:20px;
+font-family: "Times New Roman", serif;
+background:#dcdcdc;
+padding:30px;
 }
 
 .container{
 background:white;
-padding:25px;
-max-width:700px;
+padding:30px;
+max-width:720px;
 margin:auto;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+border:2px solid #444;
+box-shadow:4px 4px 8px rgba(0,0,0,0.2);
 }
 
 h1{
 text-align:center;
+margin-bottom:5px;
+}
+
+h3{
+border-bottom:1px solid #aaa;
+padding-bottom:5px;
+}
+
+.gejala{
+margin-top:15px;
 }
 
 .gejala label{
 display:block;
-margin:6px 0;
+padding:5px 0;
+font-size:16px;
 }
 
 button{
 margin-top:20px;
-padding:10px 20px;
+padding:10px 25px;
 font-size:16px;
+border:1px solid #333;
+background:#e6e6e6;
 cursor:pointer;
 }
 
+button:hover{
+background:#d4d4d4;
+}
+
 .reset{
-background:red;
+background:#8b0000;
 color:white;
+border:1px solid #550000;
 margin-left:10px;
 }
 
+.reset:hover{
+background:#a80000;
+}
+
 .hasil{
-margin-top:20px;
+margin-top:25px;
 padding:15px;
-background:#e8f5e9;
-border-radius:8px;
+border:1px solid #777;
+background:#f5f5f5;
 font-weight:bold;
+font-size:18px;
 }
 
 </style>
@@ -57,9 +80,8 @@ font-weight:bold;
 
 <div class="container">
 
-<h1>Sistem Pakar Deteksi Kerusakan Komputer</h1>
-
-<h3>Pilih Gejala:</h3>
+<h1>Sistem Pakar</h1>
+<h3>Diagnosa Kerusakan Komputer</h3>
 
 <div class="gejala">
 
@@ -77,7 +99,7 @@ font-weight:bold;
 <label><input type="checkbox" value="B12"> B12 - Kurangnya ruang virtual memory</label>
 <label><input type="checkbox" value="B13"> B13 - Suara tidak keluar meskipun driver sudah diinstall</label>
 <label><input type="checkbox" value="B14"> B14 - Muncul pesan error saat menjalankan aplikasi</label>
-<label><input type="checkbox" value="B15"> B15 - Muncul pesan error saat pertama OS di load dari HDD</label>
+<label><input type="checkbox" value="B15"> B15 - Muncul pesan error saat OS di load dari HDD</label>
 <label><input type="checkbox" value="B16"> B16 - Tidak ada tanda perangkat bekerja</label>
 <label><input type="checkbox" value="B17"> B17 - Komputer sering mati tanpa sebab</label>
 <label><input type="checkbox" value="B18"> B18 - Windows kekurangan virtual memory</label>
@@ -108,13 +130,11 @@ document.querySelectorAll("input[type=checkbox]:checked").forEach(function(el){
 checked.push(el.value);
 });
 
-let hasil = "Kerusakan tidak terdeteksi";
+let hasil="Kerusakan tidak terdeteksi";
 
 function ada(...g){
-return g.every(x => checked.includes(x));
+return g.every(x=>checked.includes(x));
 }
-
-/* RULE */
 
 if(ada("B1","B2"))
 hasil="A1 - Monitor Rusak";
@@ -144,28 +164,30 @@ else if(ada("B1","B3","B4","B5"))
 hasil="A9 - Prosesor Rusak";
 
 else if(ada("B18","B19"))
-hasil="A10 - Memory Kurang";
+hasil="A10 - Memory Kurang (Perlu Upgrade Memory)";
 
-else if(ada("B9"))
-hasil="A11 - Memory VGA Kurang";
+else if(ada("B9","B20"))
+hasil="A11 - Memory VGA Kurang (Perlu Upgrade VGA)";
 
 else if(ada("B19"))
-hasil="A12 - Clock Prosesor Rendah";
+hasil="A12 - Clock Prosesor Kurang (Perlu Upgrade Prosesor)";
 
 else if(ada("B21"))
 hasil="A13 - Kabel IDE Rusak";
 
 else if(ada("B5","B23"))
-hasil="A14 - Kurang Daya PSU";
+hasil="A14 - Kurang Daya PSU (Perlu Upgrade PSU)";
 
-else if(ada("B10"))
-hasil="A15 - Perangkat USB Rusak";
 
 else if(ada("B10","B24"))
 hasil="A16 - Keyboard Rusak";
 
-else if(ada("B25"))
+else if(ada("B10","B25"))
 hasil="A17 - Mouse Rusak";
+
+
+else if(ada("B10"))
+hasil="A15 - Perangkat USB Rusak";
 
 document.getElementById("hasil").innerHTML="Hasil Diagnosa : "+hasil;
 
